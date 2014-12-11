@@ -11,17 +11,22 @@ makeCacheMatrix <- function(x = matrix()) {
 
 		m<-NULL
 		 
+    ## set a new matrix (x) and reset the cached inverse matrix (m)
 		set <- function(y) {
 			x<<-y
 			m<<-NULL
 		}
 
+    ## return the original matrix
 		get <- function() x
 		
+    ## set the inverse (solve) of the matrix
 		setsolve <- function(solve) m<<-solve
 		
+    ## return the inverse matrix
 		getsolve <- function() m
 		
+    ## set a list of functions to set and get the original matrix and the inverse
 		list(set=set, get=get,
 		     setsolve=setsolve,
 		     getsolve=getsolve) 
@@ -33,16 +38,21 @@ makeCacheMatrix <- function(x = matrix()) {
 ## returning the cached inverse if it exists
 
 cacheSolve <- function(x, ...) {
-	
+	  
+    ## get the current cached inverse matrix if it exists 
 		m<-x$getsolve()
+    ## check if the inverse exists (not null)
 		if(!is.null(m)) {
+      ## if it exists return cached value
 			message("getting cached data")
 			return(m)
 		}
 		
+    ## otherwise get the matrix (x) and use solve to set the inverse (m)
 		data<-x$get()
 		m<-solve(data, ...)
 		x$setsolve(m)
 		
+    ## return the inverse matrix
 		m
 }
